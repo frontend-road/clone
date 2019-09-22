@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>浅拷贝</title>
+</head>
+<body>
+  <script>
+    // 'use strict';
+    function info() {
+      console.log(this.age);
+    }
+    var age = 27;
+    info(); // 27
+
+    var obj = {
+      age: 20,
+      info: function() {
+        // return () => {
+        //   console.log(this.age);
+        // }
+        return function() {
+          console.log(this.age);
+        }
+      }
+    }
+    var info = obj.info();
+    info(); // 27
+    var person = {age: 28};
+    obj.info().call(person); // 28
+    obj.info.call(person)(); // 27
+    var info = obj.info.call(person);
+    info(); // 27
+  </script>
+
+  <script>
+    function Super(age) {
+      this.age = age;
+      var obj = {a: 1};
+      return obj;
+    }
+    var instance = new Super(28);
+    var instance1 = new Super(28);
+    console.log(instance);
+    console.log(instance.age);
+
+    console.log(instance.a);
+    console.log(instance1.a);
+    instance1.a = 2;
+    console.log(instance.a);
+    console.log(instance1.a);
+  </script>
+
+  <script>
+    var obj = {
+      string: 'html',
+      number: 28,
+      bool: true,
+      NULL: null,
+      UNDEFINED: undefined,
+      SYMBOL: Symbol('html'),
+      fn: function() {},
+      arrowFn: () => {},
+      date: new Date(),
+      regexp: new RegExp('\\d'),
+      array: ['game', 1, false, function() {}, () => {}],
+      object: {
+        a: 'css',
+        b: 20190630,
+        c: false,
+        d: null,
+        e: undefined,
+        f: Symbol('css'),
+        g: function() {},
+        h: () => {},
+        i: new Date(),
+        j: /^1[3456789]\d{9}$/,
+        k: ['js', 094130, true, null, undefined, Symbol('js'), function() {}, () => {}]
+      }
+    }
+    var obj1 = Object.assign({}, obj);
+    var obj2 = {...obj};
+    var obj3 = JSON.parse(JSON.stringify(obj));
+    obj.name = 'css';
+    obj.array.push('coding');
+    console.log(obj);
+    console.log(obj1);
+    console.log(obj2);
+    /*
+    1. 忽略 undefined/symbol
+    3. 无法拷贝函数，无法拷贝原型链上的属性
+    5. 不能正确的处理 Date/RegExp
+    */
+    console.log(obj3);
+  </script>
+
+  <script>
+    var arr = [1, 2, 3];
+    console.log(arr.concat());
+    console.log(arr.slice(1));
+    console.log(Array.prototype.slice.call(arr, 1));
+  </script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>深拷贝</title>
+</head>
+<body>
+<script>
+// jquery: $.extend()
+// underscore/lodash: cloneDeep()
+// webpack: webpack-merge
+
+// 参考：https://mp.weixin.qq.com/s/scz9gRJeh7PM6GJ7wvnTsA
+var source = {
+  a: 'hello',
+  b: true,
+  c: 2019,
+  d: [1, '2', false],
+  e: {
+    f: 3
+  },
+  g: function(){},
+  h: null,
+  i: undefined,
+  j: Symbol(),
+  k: new Date(),
+  l: new RegExp('hello', 'g'),
+  m: new Set([11, 22, 33, 22]),
+  n: new Map()
+}
+
+function checkedType(target) {
+  return Object.prototype.toString.call(target).slice(8, -1)
+}
+function deepClone(target) {
+  let result
+  let targetType = checkedType(target)
+  if (targetType === 'Object') {
+    result = {}
+  } else if (targetType === 'Array') {
+    result = []
+  } else {
+    return target
+  }
+
+  for (var i in target) {
+    if (target.hasOwnProperty(i)) {
+      let value = target[i]
+      if (checkedType(value) === 'Object' || checkedType(value) === 'Array') {
+        result[i] = deepClone(value)
+      } else {
+        result[i] = value
+      }
+    }
+  }
+  return result
+}
+var clone1 = deepClone(source)
+var clone2 = deepClone(source)
+clone1.a = 'js'
+clone1.q = 'clone'
+clone1.d.push({})
+console.log(clone1)
+console.log(clone2)
+</script>
+
+<script>
+// https://juejin.im/post/5b235b726fb9a00e8a3e4e88
+// https://github.com/InterviewMap/CS-Interview-Knowledge-Map/blob/master/JS/JS-ch.md#%E6%B7%B1%E6%B5%85%E6%8B%B7%E8%B4%9D
+</script>
+</body>
+</html>
